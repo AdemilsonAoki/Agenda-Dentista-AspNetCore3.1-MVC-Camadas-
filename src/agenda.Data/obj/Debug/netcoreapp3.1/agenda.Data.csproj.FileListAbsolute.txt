@@ -1,0 +1,9 @@
+F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\bin\Debug\netcoreapp3.1\agenda.Data.deps.json
+F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\bin\Debug\netcoreapp3.1\agenda.Data.dll
+F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\bin\Debug\netcoreapp3.1\agenda.Data.pdb
+F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\obj\Debug\netcoreapp3.1\agenda.Data.csprojAssemblyReference.cache
+F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\obj\Debug\netcoreapp3.1\agenda.Data.AssemblyInfoInputs.cache
+F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\obj\Debug\netcoreapp3.1\agenda.Data.AssemblyInfo.cs
+F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\obj\Debug\netcoreapp3.1\agenda.Data.csproj.CoreCompileInputs.cache
+F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\obj\Debug\netcoreapp3.1\agenda.Data.dll
+F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\obj\Debug\netcoreapp3.1\agenda.Data.pdb
