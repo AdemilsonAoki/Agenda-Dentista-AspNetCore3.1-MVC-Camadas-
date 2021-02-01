@@ -11,6 +11,7 @@ namespace agenda.Business.Models
         public TipoCliente TipoCliente { get; set; }
         public Endereco Endereco { get; set; }
         public bool Ativo { get; set; }
+        public IEnumerable<Consulta> Consultas { get; set; }
 
 
     }

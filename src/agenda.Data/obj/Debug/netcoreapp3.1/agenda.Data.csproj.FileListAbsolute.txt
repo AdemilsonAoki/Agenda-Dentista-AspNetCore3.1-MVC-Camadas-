@@ -7,3 +7,6 @@ F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\obj\De
 F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\obj\Debug\netcoreapp3.1\agenda.Data.csproj.CoreCompileInputs.cache
 F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\obj\Debug\netcoreapp3.1\agenda.Data.dll
 F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\obj\Debug\netcoreapp3.1\agenda.Data.pdb
+F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\bin\Debug\netcoreapp3.1\agenda.Business.dll
+F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\bin\Debug\netcoreapp3.1\agenda.Business.pdb
+F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.Data\obj\Debug\netcoreapp3.1\agenda.Data.csproj.CopyComplete
