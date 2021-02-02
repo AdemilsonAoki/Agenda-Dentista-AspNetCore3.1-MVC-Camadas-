@@ -11,6 +11,11 @@ namespace agenda.Business.Interfaces
         Task<IEnumerable<Consulta>> ObterConsultaPorCliente(Guid clienteId);
         Task<IEnumerable<Consulta>> ObterConsultaPorDentista(Guid dentistaId);
 
+        Task<IEnumerable<Consulta>> ObterDentistaClienteAgenda();
+
+
         Task<Consulta> ObterConsultaDentistaCliente(Guid id);
+
+        
     }
 }

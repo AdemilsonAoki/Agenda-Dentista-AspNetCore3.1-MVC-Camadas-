@@ -4,56 +4,70 @@ using agenda.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace agenda.Data.Repository
 {
-    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity, new()
     {
         protected readonly MeuDbContext Db;
         protected readonly DbSet<TEntity> Dbset;
 
-
-        public Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate)
+        protected Repository(MeuDbContext db)
         {
-            throw new NotImplementedException();
+            Db = db;
+            Dbset = db.Set<TEntity>();
+
         }
 
-        public Task Adicionar(TEntity entity)
+
+        public async Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await Dbset.AsNoTracking().Where(predicate).ToListAsync();
         }
 
-        public Task Atualizar(TEntity entity)
+        public  virtual async Task Adicionar(TEntity entity)
         {
-            throw new NotImplementedException();
+            Dbset.Add(entity);
+            await SaveChanges();
         }
 
-        public Task<TEntity> ObterPorIf(Guid id)
+        public virtual async Task Atualizar(TEntity entity)
         {
-            throw new NotImplementedException();
+            Dbset.Update(entity);
+            await SaveChanges();
         }
 
-        public Task<List<TEntity>> ObterTodos()
+        public virtual async Task<TEntity> ObterPorIf(Guid id)
         {
-            throw new NotImplementedException();
+            return await Dbset.FindAsync(id);
+           
         }
 
-        public Task Remover(Guid id)
+        public virtual async Task<List<TEntity>> ObterTodos()
         {
-            throw new NotImplementedException();
+            return await Dbset.ToListAsync();
+
         }
 
-        public Task<int> SaveChanges()
+        public virtual async Task Remover(Guid id)
         {
-            throw new NotImplementedException();
+           
+            Dbset.Remove(new TEntity { Id = id });
+            await SaveChanges();
         }
 
-        public void Dispose()
+        public async Task<int> SaveChanges()
         {
-            throw new NotImplementedException();
+            return await Db.SaveChangesAsync();
+        }
+
+        public virtual async void Dispose()
+        {
+            Db?.Dispose();
         }
     }
 }

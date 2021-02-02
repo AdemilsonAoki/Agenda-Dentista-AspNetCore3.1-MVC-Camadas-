@@ -10,5 +10,8 @@ namespace agenda.Business.Interfaces
     {
         Task<Cliente> ObterClienteEndereco(Guid id);
 
+        Task<IEnumerable<Consulta>> ObterConsultaPorCliente(Guid clienteId);
+
+
     }
 }
