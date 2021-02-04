@@ -1,4 +1,5 @@
 using agenda.app.Data;
+using agenda.Business.Interfaces;
 using agenda.Data.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using agenda.Data.Repository;
+using AutoMapper;
 
 namespace agenda.app
 {
@@ -38,6 +41,15 @@ namespace agenda.app
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddScoped<MeuDbContext>();
+            services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IConsultaRepository, ConsultaRepository>();
+            services.AddScoped<IDentistaRepository, DentistaRepository>();
+            services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace agenda.Business.Interfaces
 {
-    interface IClienteRepository : IRepository<Cliente>
+    public interface IClienteRepository : IRepository<Cliente>
     {
         Task<Cliente> ObterClienteEndereco(Guid id);
 
-        Task<IEnumerable<Consulta>> ObterConsultaPorCliente(Guid clienteId);
+        Task<Cliente> ObterConsultaPorClienteEndereco(Guid Id);
+
 
 
     }

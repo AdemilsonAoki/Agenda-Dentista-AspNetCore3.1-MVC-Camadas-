@@ -68,6 +68,10 @@
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
               "version": "[3.2.4, )"
+            },
+            "automapper.extensions.microsoft.dependencyinjection": {
+              "target": "Package",
+              "version": "[8.1.0, )"
             }
           },
           "imports": [

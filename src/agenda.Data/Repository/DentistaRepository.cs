@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace agenda.Data.Repository
 {
-    class DentistaRepository : Repository<Dentista>, IDentistaRepository
+    public class DentistaRepository : Repository<Dentista>, IDentistaRepository
     {
 
         public DentistaRepository(MeuDbContext context) : base(context) {  }

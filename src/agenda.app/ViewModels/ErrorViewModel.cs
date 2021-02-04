@@ -1,6 +1,6 @@
 using System;
 
-namespace agenda.app.Models
+namespace agenda.app.ViewModels
 {
     public class ErrorViewModel
     {
