@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using agenda.app.ViewModels;
 
 namespace agenda.app.Data
 {
@@ -12,5 +13,6 @@ namespace agenda.app.Data
             : base(options)
         {
         }
+   
     }
 }

@@ -19,12 +19,14 @@ namespace agenda.Data.Repository
 
         public async Task<Dentista> ObterDentista(Guid id)
         {
-            return await Db.Dentistas.AsNoTracking().Include(con => con.Consultas).FirstOrDefaultAsync(d => d.Id == id);
+            return await Db.Dentistas.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id);
         }
 
-        public async Task<IEnumerable<Dentista>> ObterDentistaConsulta()
+   
+        public async  Task<Dentista> ObterDentistaConsulta(Guid id)
         {
-            return await Db.Dentistas.AsNoTracking().Include(con => con.Consultas).OrderBy(con => con.Nome).ToListAsync();
+            return await Db.Dentistas.AsNoTracking().Include(con => con.Consultas).FirstOrDefaultAsync(d => d.Id == id);
+
         }
     }
 }

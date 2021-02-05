@@ -15,7 +15,7 @@ namespace agenda.app.ViewModels
         public string Nome { get; set; }
         public string Documento { get; set; }
         public string Imagem { get; set; }
-        public IFormFile ImagemUPload { get; set; }
+       // public IFormFile ImagemUPload { get; set; }
 
         [DisplayName("Ativo?")]
         public bool Ativo { get; set; }

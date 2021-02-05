@@ -9,7 +9,7 @@ namespace agenda.Business.Interfaces
     public interface IDentistaRepository : IRepository<Dentista>
     {
         Task<Dentista> ObterDentista(Guid id);
-        Task<IEnumerable<Dentista>> ObterDentistaConsulta();
+        Task<Dentista> ObterDentistaConsulta(Guid id);
 
 
 

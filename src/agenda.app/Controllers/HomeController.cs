@@ -1,4 +1,4 @@
-﻿using agenda.app.Models;
+﻿using agenda.app.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;

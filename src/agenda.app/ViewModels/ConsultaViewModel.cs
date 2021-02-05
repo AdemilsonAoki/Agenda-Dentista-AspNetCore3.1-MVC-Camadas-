@@ -12,6 +12,14 @@ namespace agenda.app.ViewModels
         [Key]
         public Guid Id { get; set; }
 
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Dentista")]
+        public Guid DentistaId { get; set; }
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Cliente")]
+
+        public Guid ClienteId { get; set; }
+
         [ScaffoldColumn(false)]
         public DateTime DataConsulta { get; set; }
 

@@ -21,13 +21,13 @@ using agenda.app;
 #nullable disable
 #nullable restore
 #line 2 "F:\Users\PC\Desktop\Projetos\mvc-dentista\dentista-agenda\src\agenda.app\Views\_ViewImports.cshtml"
-using agenda.app.Models;
+using agenda.app.ViewModels;
 
 #line default
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"99464617055fdb505bb0bb7fd91f9b14f7b0d030", @"/Views/Home/Index.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"2623ae9ee863bdd83fb0348b98294bb64c2bf426", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"c5123ee28ce12bff7aee1eb3d5ad691d4d72e285", @"/Views/_ViewImports.cshtml")]
     public class Views_Home_Index : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         #pragma warning disable 1998
