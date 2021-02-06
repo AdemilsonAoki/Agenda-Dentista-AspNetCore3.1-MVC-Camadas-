@@ -1,15 +1,14 @@
 ﻿@model agenda.app.ViewModels.ClienteViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Novo Cliete";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>ClienteViewModel</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -24,24 +23,28 @@
             </div>
             <div class="form-group">
                 <label asp-for="TipoCliente" class="control-label"></label>
-                <input asp-for="TipoCliente" class="form-control" />
-                <span asp-validation-for="TipoCliente" class="text-danger"></span>
+                <input type="radio" value="1" asp-for="TipoCliente" checked/> Pessoa Física
+                <input type="radio" value="2" asp-for="TipoCliente"/> Pessoa Jurídica
+               
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)
                 </label>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+            <h4>Endereço </h4>
+			<hr />
+            <partial name="_Endereco" />
+
+			<div class="form-group">
+				<input type="submit" value="Cadastrar" class="btn btn-primary" />
+				<a class ="btn btn-info"asp-action="Index">Voltar</a>
+			</div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

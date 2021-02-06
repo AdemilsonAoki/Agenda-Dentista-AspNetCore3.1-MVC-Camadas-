@@ -10,6 +10,8 @@ using agenda.app.ViewModels;
 using agenda.Business.Interfaces;
 using AutoMapper;
 using agenda.Business.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace agenda.app.Controllers
 {
@@ -55,9 +57,17 @@ namespace agenda.app.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Documento,Imagem,Ativo")] DentistaViewModel dentistaViewModel)
+        public async Task<IActionResult> Create(DentistaViewModel dentistaViewModel)
         {
-            if (ModelState.IsValid) return View(dentistaViewModel);
+            if (!ModelState.IsValid) return View(dentistaViewModel);
+
+            var imgPrefix = Guid.NewGuid() + "_";
+
+            if (!await UploadArquivo(dentistaViewModel.ImagemUPload, imgPrefix))
+            {
+                return View(dentistaViewModel);
+            }
+            dentistaViewModel.Imagem = imgPrefix + dentistaViewModel.ImagemUPload.FileName;
             var dentista = _mapper.Map<Dentista>(dentistaViewModel);
             await _dentistaRepository.Adicionar(dentista);
 
@@ -139,5 +149,24 @@ namespace agenda.app.Controllers
             return _mapper.Map<DentistaViewModel>(await _dentistaRepository.ObterDentista(id));
 
         }
+
+        private async Task<bool>UploadArquivo(IFormFile arquivo, string imgPrefixo)
+        {
+            if (arquivo.Length <= 0) return false;
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagens", imgPrefixo + arquivo.FileName);
+            if (System.IO.File.Exists(path))
+            {
+                ModelState.AddModelError(string.Empty, "Já existe um arquivo com esse nome!!");
+                return false;
+            }
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await arquivo.CopyToAsync(stream);
+            }
+            return true;
+
+        }
     }
+
 }

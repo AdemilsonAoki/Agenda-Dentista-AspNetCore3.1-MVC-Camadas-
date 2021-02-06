@@ -24,4 +24,8 @@
     <ProjectReference Include="..\agenda.Data\agenda.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Imagens\" />
+  </ItemGroup>
+
 </Project>

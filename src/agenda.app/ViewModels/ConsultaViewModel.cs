@@ -31,5 +31,9 @@ namespace agenda.app.ViewModels
         public DentistaViewModel Dentista { get; set; }
 
         public ClienteViewModel Cliente { get; set; }
+
+        public IEnumerable<DentistaViewModel> Dentistas { get; set; }
+        public IEnumerable<ClienteViewModel> Clientes { get; set; }
+
     }
 }

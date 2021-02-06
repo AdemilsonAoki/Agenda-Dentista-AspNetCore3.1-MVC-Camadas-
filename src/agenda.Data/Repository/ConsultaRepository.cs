@@ -36,9 +36,13 @@ namespace agenda.Data.Repository
 
         public async Task<IEnumerable<Consulta>> ObterDentistaClienteAgenda()
         {
-            return await Db.Consultas.AsNoTracking().Include(c => c.Cliente)
+            return await Db.Consultas.AsNoTracking()
+                .Include(c => c.Cliente)
                 .Include(d => d.Dentista)
                .OrderBy(con => con.DataConsulta).ToListAsync();
         }
+
+
+        
     }
 }

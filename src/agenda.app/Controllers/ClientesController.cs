@@ -57,7 +57,7 @@ namespace agenda.app.Controllers
         {
 
 
-            if (ModelState.IsValid) return View(clienteViewModel);
+            if (!ModelState.IsValid) return View(clienteViewModel);
 
             var cliente = _mapper.Map<Cliente>(clienteViewModel);
             await _clienteRepository.Adicionar(cliente);

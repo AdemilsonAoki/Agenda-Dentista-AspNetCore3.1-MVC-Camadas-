@@ -9,37 +9,40 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using agenda.app.Data;
 using agenda.app.ViewModels;
+using agenda.Business.Interfaces;
+using AutoMapper;
+using agenda.Business.Models;
 
 namespace agenda.app.Controllers
 {
-    public class ConsultasController : Controller
+    public class ConsultasController : BaseController
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IConsultaRepository _consultaRepository;
+        private readonly IClienteRepository _clienteRepository;
+        private readonly IDentistaRepository _dentistaRepository;
+        private readonly IMapper _mapper;
 
-        public ConsultasController(ApplicationDbContext context)
+        public ConsultasController(IConsultaRepository consultaRepository, IMapper mapper,
+            IClienteRepository clienteRepository, IDentistaRepository dentistaRepository)
         {
-            _context = context;
+            _consultaRepository = consultaRepository;
+            _clienteRepository = clienteRepository;
+            _dentistaRepository = dentistaRepository;
+            _mapper = mapper;
         }
 
         // GET: Consultas
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ConsultaViewModel.Include(c => c.Cliente).Include(c => c.Dentista);
-            return View(await applicationDbContext.ToListAsync());
+           
+            return View(_mapper.Map<IEnumerable<ConsultaViewModel>>(await _consultaRepository.ObterDentistaClienteAgenda()));
         }
 
         // GET: Consultas/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var consultaViewModel = await _context.ConsultaViewModel
-                .Include(c => c.Cliente)
-                .Include(c => c.Dentista)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var consultaViewModel = await ObterConsultaDentistaCliente(id);
             if (consultaViewModel == null)
             {
                 return NotFound();
@@ -49,11 +52,15 @@ namespace agenda.app.Controllers
         }
 
         // GET: Consultas/Create
-        public IActionResult Create()
+        public async Task <IActionResult> Create()
         {
-            ViewData["ClienteId"] = new SelectList(_context.ClienteViewModel, "Id", "Documento");
-            ViewData["DentistaId"] = new SelectList(_context.DentistaViewModel, "Id", "Id");
-            return View();
+            var consultaViewModel = await PopularClientes(new ConsultaViewModel());
+
+
+
+        
+
+            return View(consultaViewModel);
         }
 
         // POST: Consultas/Create
@@ -61,35 +68,27 @@ namespace agenda.app.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DentistaId,ClienteId,Descricao")] ConsultaViewModel consultaViewModel)
+        public async Task<IActionResult> Create(ConsultaViewModel consultaViewModel)
         {
-            if (ModelState.IsValid)
-            {
-                consultaViewModel.Id = Guid.NewGuid();
-                _context.Add(consultaViewModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ClienteId"] = new SelectList(_context.ClienteViewModel, "Id", "Documento", consultaViewModel.ClienteId);
-            ViewData["DentistaId"] = new SelectList(_context.DentistaViewModel, "Id", "Id", consultaViewModel.DentistaId);
+            consultaViewModel = await PopularClientes(consultaViewModel);
+
+            if (ModelState.IsValid) return View(consultaViewModel);
+
+            _consultaRepository.Adicionar(_mapper.Map<Consulta>(consultaViewModel));
+
+            // ViewData["ClienteId"] = new SelectList(_context.ClienteViewModel, "Id", "Documento", consultaViewModel.ClienteId);
+            //ViewData["DentistaId"] = new SelectList(_context.DentistaViewModel, "Id", "Id", consultaViewModel.DentistaId);
             return View(consultaViewModel);
         }
-
         // GET: Consultas/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var consultaViewModel = await _context.ConsultaViewModel.FindAsync(id);
+            var consultaViewModel = await ObterConsultaDentistaCliente(id);
             if (consultaViewModel == null)
             {
                 return NotFound();
             }
-            ViewData["ClienteId"] = new SelectList(_context.ClienteViewModel, "Id", "Documento", consultaViewModel.ClienteId);
-            ViewData["DentistaId"] = new SelectList(_context.DentistaViewModel, "Id", "Id", consultaViewModel.DentistaId);
+           
             return View(consultaViewModel);
         }
 
@@ -100,54 +99,30 @@ namespace agenda.app.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,DentistaId,ClienteId,Descricao")] ConsultaViewModel consultaViewModel)
         {
-            if (id != consultaViewModel.Id)
-            {
-                return NotFound();
-            }
+            if (id != consultaViewModel.Id) return NotFound();
+            
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(consultaViewModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ConsultaViewModelExists(consultaViewModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ClienteId"] = new SelectList(_context.ClienteViewModel, "Id", "Documento", consultaViewModel.ClienteId);
-            ViewData["DentistaId"] = new SelectList(_context.DentistaViewModel, "Id", "Id", consultaViewModel.DentistaId);
-            return View(consultaViewModel);
+            if (!ModelState.IsValid) return View(consultaViewModel);
+
+            await _consultaRepository.Atualizar(_mapper.Map<Consulta>(consultaViewModel));
+
+            return RedirectToAction("Index");
+            
+             
+                
         }
 
         // GET: Consultas/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
+            var consulta = await ObterConsultaDentistaCliente(id);
+           
+            if(consulta == null)
             {
                 return NotFound();
             }
 
-            var consultaViewModel = await _context.ConsultaViewModel
-                .Include(c => c.Cliente)
-                .Include(c => c.Dentista)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (consultaViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(consultaViewModel);
+            return View(consulta);
         }
 
         // POST: Consultas/Delete/5
@@ -155,15 +130,39 @@ namespace agenda.app.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var consultaViewModel = await _context.ConsultaViewModel.FindAsync(id);
-            _context.ConsultaViewModel.Remove(consultaViewModel);
-            await _context.SaveChangesAsync();
+            var consulta = await ObterConsultaDentistaCliente(id);
+
+            if (consulta == null)
+            {
+                return NotFound();
+            }
+
+            await _consultaRepository.Remover(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ConsultaViewModelExists(Guid id)
+        private async Task<ConsultaViewModel> ObterConsultaDentistaCliente(Guid id)
         {
-            return _context.ConsultaViewModel.Any(e => e.Id == id);
+            var consulta = _mapper.Map<ConsultaViewModel>(await _consultaRepository.ObterConsultaDentistaCliente(id));
+            consulta.Clientes = _mapper.Map<IEnumerable<ClienteViewModel>>(await _clienteRepository.ObterTodos());
+            consulta.Dentistas = _mapper.Map<IEnumerable<DentistaViewModel>>(await _dentistaRepository.ObterTodos());
+
+            return consulta;
+        }
+
+        private async Task<ConsultaViewModel> PopularClientes(ConsultaViewModel consulta)
+        {
+            consulta.Clientes = _mapper.Map<IEnumerable<ClienteViewModel>>(await _clienteRepository.ObterTodos());
+            consulta.Dentistas = _mapper.Map<IEnumerable<DentistaViewModel>>(await _dentistaRepository.ObterTodos());
+
+
+            return consulta;
+        } 
+        private async Task<ConsultaViewModel> PopularDentista(ConsultaViewModel consulta)
+        {
+            consulta.Dentistas = _mapper.Map<IEnumerable<DentistaViewModel>>(await _dentistaRepository.ObterTodos());
+
+            return consulta;
         }
     }
 }
