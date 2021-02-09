@@ -72,8 +72,8 @@ namespace agenda.app.Controllers
             await _dentistaRepository.Adicionar(dentista);
 
             return RedirectToAction(nameof(Index));
-            
-            
+
+
         }
 
         // GET: Dentistas/Edit/5
@@ -100,10 +100,28 @@ namespace agenda.app.Controllers
             {
                 return NotFound();
             }
+            var dentistaAtualizacao = await ObterDentistaConsulta(id);
+            dentistaViewModel.Imagem = dentistaAtualizacao.Imagem;
 
-            if (ModelState.IsValid) return View(dentistaViewModel);
-            var dentista = _mapper.Map<Dentista>(dentistaViewModel);
-            await _dentistaRepository.Atualizar(dentista);
+            if (!ModelState.IsValid) return View(dentistaViewModel);
+
+            if (dentistaViewModel.ImagemUPload != null)
+            {
+                var imgPrefix = Guid.NewGuid() + "_";
+
+                if (!await UploadArquivo(dentistaViewModel.ImagemUPload, imgPrefix))
+                {
+                    return View(dentistaViewModel);
+                }
+
+                dentistaAtualizacao.Imagem = imgPrefix + dentistaViewModel.ImagemUPload.FileName;
+            }
+
+            dentistaAtualizacao.Nome = dentistaViewModel.Nome;
+            dentistaAtualizacao.Ativo = dentistaViewModel.Ativo;
+
+
+            await _dentistaRepository.Atualizar(_mapper.Map<Dentista>(dentistaAtualizacao));
 
             return RedirectToAction(nameof(Index));
         }
@@ -113,7 +131,7 @@ namespace agenda.app.Controllers
         {
 
             var dentistaViewModel = await ObterDentista(id);
-             if (dentistaViewModel == null)
+            if (dentistaViewModel == null)
             {
                 return NotFound();
             }
@@ -131,11 +149,11 @@ namespace agenda.app.Controllers
             if (dentistaViewModel == null) return NotFound();
 
             await _dentistaRepository.Remover(id);
-      
+
             return RedirectToAction(nameof(Index));
         }
 
-     
+
 
         private async Task<DentistaViewModel> ObterDentistaConsulta(Guid id)
         {
@@ -143,14 +161,14 @@ namespace agenda.app.Controllers
 
         }
 
-         
+
         private async Task<DentistaViewModel> ObterDentista(Guid id)
         {
             return _mapper.Map<DentistaViewModel>(await _dentistaRepository.ObterDentista(id));
 
         }
 
-        private async Task<bool>UploadArquivo(IFormFile arquivo, string imgPrefixo)
+        private async Task<bool> UploadArquivo(IFormFile arquivo, string imgPrefixo)
         {
             if (arquivo.Length <= 0) return false;
 

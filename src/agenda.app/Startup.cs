@@ -17,6 +17,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using agenda.Data.Repository;
 using AutoMapper;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace agenda.app
 {
@@ -75,6 +77,16 @@ namespace agenda.app
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            var defaultCulture = new CultureInfo("pt-BR");
+            var localizationOprions = new RequestLocalizationOptions
+            { 
+                DefaultRequestCulture = new RequestCulture(defaultCulture),
+                SupportedCultures = new List<CultureInfo> { defaultCulture },
+                SupportedUICultures = new List<CultureInfo> { defaultCulture },
+            };
+            app.UseRequestLocalization(localizationOprions);
+
 
             app.UseEndpoints(endpoints =>
             {
